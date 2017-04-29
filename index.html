@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="/styles/reset.css">
-  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/main.css">
   <title>Trivia Trends</title>
-  <link rel="shortcut icon" href="/styles/assets/crownFavicon.png">
+  <link rel="shortcut icon" href="styles/assets/crownFavicon.png">
 </head>
 
-<body>
+<body ng-controller="mainCtrl">
   <header>
     <div></div>
-    <h1>Trivia Trends</h1>
-    <button><span>+</span> Add Question</button>
+    <h1>Trivia Trends </h1>
+    <button ng-click="openModal()"><span>+</span> Add Question</button>
   </header>
   <article>
     <nav>
@@ -21,29 +21,52 @@
       <a>Easy</a>
       <a>Medium</a>
       <a>Hard</a>
-      <a>Search by Animal</a>
+      <a ng-click="toggleSearch()">Search by Animal</a>
     </nav>
-    <div class="search">
+    <div class="search" ng-show="searchOpen">
       <input type="text" placeholder="Animal to search by">
     </div>
 
     <!-- Questions go here -->
+    {{questions[0]}}
+    <div class="qBox">
+    </div>
+    <div class="question-wrapper" ng-repeat="question in questions" ng-class="{green: question.chosenAnswer && question.chosenAnswer == question.correct_answer, red: question.chosenAnswer && question.chosenAnswer != question.correct_answer}">
+
+      <h3>{{question.question}}</h3>
+      <div ng-class="{green: question.labelDifficulty == 'Easy', yellow: question.labelDifficulty == 'Medium', red: question.labelDifficulty == 'Hard'}">
+        {{question.labelDifficulty}}
+      </div>
+      <div class="gear" ng-click="openModal(question)">
+        <img src="./styles/assets/gear.svg" alt="">
+      </div>
+      <ul>
+        <li ng-click="checkAnswer(question._id, 1)" ng-class="{chosen: question.chosenAnswer == 1}">{{question.options[1]}}</li>
+        <li ng-click="checkAnswer(question._id, 1)" ng-class="{chosen: question.chosenAnswer == 1}">{{question.options[2]}}</li>
+        <li ng-click="checkAnswer(question._id, 1)" ng-class="{chosen: question.chosenAnswer == 1}">{{question.options[3]}}</li>
+        <li ng-click="checkAnswer(question._id, 1)" ng-class="{chosen: question.chosenAnswer == 1}">{{question.options[4]}}</li>
+      </ul>
+      
+    </div>
+    <h3 class="change-page left" ng-click="changePage(page, -1)" ng-hide="page == 0">< Prev Page</h3>
+    <h3 class="change-page right" ng-click="changePage(page, 1)" ng-hide="questions.length < 10">Next Page ></h3>
+
 
   </article>
 
-  <div class="modal">
+  <div class="modal" ng-show="modalOpen">
     <form>
       <h4 class="close">X</h4>
-      <span>Question</span><input type="text" ng-model="<!-- Question -->">
-      <span>Animal it's about</span><input type="text" ng-model="<!-- Animal -->">
+      <span>Question</span><input type="text" ng-model="question">
+      <span>Animal it's about</span><input type="text" ng-model="animal">
       <span>Difficulty</span>
       <div class="range">
-        <input type="range" min="1" max="3" ng-model="<!-- Difficulty -->">
+        <input type="range" min="1" max="3" ng-model="difficulty">
 
         <h5>{{newQuestion.difficulty}}</h5>
       </div>
       <h4>Options</h4>
-      <div>
+      <!--<div>
         <input type="radio" ng-model="" value="1">
         <input type="text" ng-model="">
       </div>
@@ -58,7 +81,7 @@
       <div>
         <input type="radio" ng-model="" value="4">
         <input type="text" ng-model="">
-      </div>
+      </div>-->
 
       <!--Add question buttons-->
       <div class="buttons">
@@ -81,7 +104,9 @@
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js" charset="utf-8"></script>
-  <script src="./app.js" charset="utf-8"></script>
+  <script src="js/app.js" charset="utf-8"></script>
+  <script src="js/mainCtrl.js" charset="utf-8"></script>
+  <script src="js/mainService.js" charset="utf-8"></script>
 </body>
 
 </html>

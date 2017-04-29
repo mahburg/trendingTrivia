@@ -10,7 +10,7 @@ header {
   font-weight: bold;
   height: 15vh;
   text-align: center;
-  background: rgb(218, 45, 123);
+  background: darkslategray;
   padding: 2em;
   position: relative;
 }
